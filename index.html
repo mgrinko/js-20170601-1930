@@ -5,6 +5,7 @@
   <title>Title</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="app.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js" defer></script>
   <script src="./js/phone-catalogue.js" defer></script>
   <script src="./js/phone-page.js" defer></script>
   <script src="./js/app.js" defer></script>
@@ -47,5 +48,27 @@
       </div>
     </div>
   </div>
+
+<script type="text/template" id="phone-catalogue-template">
+
+  <ul class="phones">
+    <% phones.forEach((phone) => { %>
+
+      <li class="thumbnail">
+        <a href="#!/phones/<%= phone.id %>" class="thumb">
+          <img alt="Motorola XOOM™ with Wi-Fi"
+               src="<%= phone.imageUrl %>">
+        </a>
+
+        <a href="#!/phones/<%= phone.id %>"><%- phone.name %></a>
+
+        <p><%= phone.snippet %></p>
+      </li>
+
+    <% }); %>
+  </ul>
+
+</script>
+
 </body>
 </html>
