@@ -1,11 +1,12 @@
 'use strict';
 
 export default class PhoneCatalogue {
+
   constructor(options) {
     this._el = options.el;
     this._phones = options.phones;
 
-    const template = document.getElementById('phone-catalogue-template').innerHTML;
+    const template = require('raw-loader!./template.html');
 
     this._compiledTemplate = _.template(template);
 

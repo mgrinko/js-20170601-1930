@@ -74,6 +74,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+
+
 new __WEBPACK_IMPORTED_MODULE_0__components_phone_page__["a" /* default */]({
   el: document.querySelector('[data-component="phone-page"]')
 });
@@ -83,7 +85,7 @@ new __WEBPACK_IMPORTED_MODULE_0__components_phone_page__["a" /* default */]({
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__phone_catalogue__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__phone_catalogue_phone_catalogue__ = __webpack_require__(2);
 
 
 
@@ -92,7 +94,7 @@ class PhonePage {
   constructor(options) {
     this._el = options.el;
 
-    this._catalogue = new __WEBPACK_IMPORTED_MODULE_0__phone_catalogue__["a" /* default */]({
+    this._catalogue = new __WEBPACK_IMPORTED_MODULE_0__phone_catalogue_phone_catalogue__["a" /* default */]({
       el: this._el.querySelector('[data-component="phone-catalogue"]'),
       phones: phonesFromServer
     });
@@ -266,11 +268,12 @@ const phonesFromServer = [
 
 
 class PhoneCatalogue {
+
   constructor(options) {
     this._el = options.el;
     this._phones = options.phones;
 
-    const template = document.getElementById('phone-catalogue-template').innerHTML;
+    const template = __webpack_require__(3);
 
     this._compiledTemplate = _.template(template);
 
@@ -287,5 +290,12 @@ class PhoneCatalogue {
 
 
 
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+module.exports = "<ul class=\"phones\">\n  <% phones.forEach((phone) => { %>\n\n  <li class=\"thumbnail\">\n    <a href=\"#!/phones/<%= phone.id %>\" class=\"thumb\">\n      <img alt=\"Motorola XOOM™ with Wi-Fi\"\n           src=\"<%= phone.imageUrl %>\">\n    </a>\n\n    <a href=\"#!/phones/<%= phone.id %>\"><%- phone.name %></a>\n\n    <p><%= phone.snippet %></p>\n  </li>\n\n  <% }); %>\n</ul>\n"
+
 /***/ })
 /******/ ]);
+//# sourceMappingURL=index.js.map

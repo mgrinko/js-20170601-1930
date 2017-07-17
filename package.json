@@ -4,7 +4,8 @@
   "description": "",
   "main": "s1.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./node_modules/.bin/webpack"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/mgrinko/js-20170601-1930#readme",
   "devDependencies": {
+    "raw-loader": "^0.5.1",
     "webpack": "^3.3.0"
   }
 }
