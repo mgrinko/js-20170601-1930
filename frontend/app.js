@@ -1,6 +1,6 @@
 'use strict';
 
-import PhonePage from './components/phone-page';
+import PhonePage from './components/phone-page/phone-page';
 
 
 

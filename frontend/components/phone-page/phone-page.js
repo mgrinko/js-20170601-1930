@@ -1,6 +1,6 @@
 'use strict';
 
-import PhoneCatalogue from './phone-catalogue/phone-catalogue';
+import PhoneCatalogue from '../phone-catalogue/phone-catalogue';
 
 export default class PhonePage {
   constructor(options) {
