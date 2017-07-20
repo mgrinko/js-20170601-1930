@@ -2,7 +2,10 @@
 
 {{#each phones as |phone|}}
 
-  <li class="thumbnail">
+  <li class="thumbnail"
+      data-element="phone"
+      data-phone-id="{{ phone.id }}">
+
     <a href="#!/phones/{{ phone.id }}" class="thumb">
       <img alt="{{{ phone.name }}}"
            src="{{ phone.imageUrl }}">
