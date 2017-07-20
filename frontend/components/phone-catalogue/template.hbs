@@ -1,0 +1,18 @@
+<ul class="phones">
+
+{{#each phones as |phone|}}
+
+  <li class="thumbnail">
+    <a href="#!/phones/{{ phone.id }}" class="thumb">
+      <img alt="{{{ phone.name }}}"
+           src="{{ phone.imageUrl }}">
+    </a>
+
+    <a href="#!/phones/{{ phone.id }}">{{{ phone.name }}}</a>
+
+    <p>{{{ phone.snippet }}}</p>
+  </li>
+
+{{/each}}
+
+</ul>

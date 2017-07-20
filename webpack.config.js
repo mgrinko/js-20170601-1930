@@ -1,4 +1,6 @@
-var path = require('path');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const path = require('path');
+
 
 module.exports = {
   entry: './frontend/app.js',
@@ -8,5 +10,35 @@ module.exports = {
   },
 
   watch: true,
-  devtool: 'source-map'
+  devtool: 'source-map',
+
+  module: {
+    rules: [
+      {
+        test: /\.hbs$/,
+        loader: "handlebars-loader"
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['env']
+          }
+        }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          { loader: "style-loader" },
+          { loader: "css-loader" }
+        ]
+      },
+    ]
+  },
+
+  plugins: [
+    new UglifyJSPlugin()
+  ]
 };

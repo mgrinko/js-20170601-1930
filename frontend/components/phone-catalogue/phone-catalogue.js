@@ -1,14 +1,14 @@
 'use strict';
 
+import './styles.css';
+
 export default class PhoneCatalogue {
 
   constructor(options) {
     this._el = options.el;
     this._phones = options.phones;
 
-    const template = require('raw-loader!./template.html');
-
-    this._compiledTemplate = _.template(template);
+    this._compiledTemplate = require('./template.hbs');
 
     this._render();
   }
