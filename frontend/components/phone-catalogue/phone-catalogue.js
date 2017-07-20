@@ -31,6 +31,11 @@ export default class PhoneCatalogue {
       return;
     }
 
-    console.log(phoneElement.dataset.phoneId);
+    let customEvent = new CustomEvent('phoneSelected', {
+      bubbles: false,
+      detail: phoneElement.dataset.phoneId
+    });
+
+    this._el.dispatchEvent(customEvent);
   }
 }
