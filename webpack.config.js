@@ -39,6 +39,15 @@ module.exports = {
   },
 
   plugins: [
-    new UglifyJSPlugin()
-  ]
+    new UglifyJSPlugin({
+      sourceMap: true
+    })
+  ],
+
+  devServer: {
+    hot: true, // Tell the dev-server we're using HMR
+    inline: true,
+    contentBase: path.resolve(__dirname, 'public'),
+    publicPath: '/'
+  }
 };
