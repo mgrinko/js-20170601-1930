@@ -14,4 +14,12 @@ export default class Component {
   show() {
     this._el.classList.remove(CLASS_HIDDEN);
   }
+
+  on(eventName, callback) {
+    this._el.addEventListener(eventName, callback);
+  }
+
+  off(eventName, callback) {
+    this._el.removeEventListener(eventName, callback);
+  }
 }

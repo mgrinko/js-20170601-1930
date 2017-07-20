@@ -14,7 +14,7 @@ export default class PhoneCatalogue extends Component {
 
     this._render();
 
-    this._el.addEventListener('click', this._onPhoneClick.bind(this));
+    this.on('click', this._onPhoneClick.bind(this));
   }
 
   _render() {
