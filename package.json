@@ -2,15 +2,16 @@
   "name": "js-20170601-1930",
   "version": "1.0.0",
   "description": "",
-  "main": "s1.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/.bin/webpack-dev-server --hot --inline"
+    "start": "./node_modules/.bin/webpack-dev-server --inline --hot"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mgrinko/js-20170601-1930.git"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
@@ -20,13 +21,18 @@
   "devDependencies": {
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "css-loader": "^0.28.4",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.7.0",
     "handlebars": "^4.0.10",
     "handlebars-loader": "^1.5.0",
     "raw-loader": "^0.5.1",
     "style-loader": "^0.18.2",
     "uglifyjs-webpack-plugin": "^0.4.6",
-    "webpack": "^3.3.0"
+    "webpack": "^3.3.0",
+    "webpack-dev-server": "^2.5.1"
   }
 }
