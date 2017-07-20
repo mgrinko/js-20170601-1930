@@ -22,4 +22,14 @@ export default class Component {
   off(eventName, callback) {
     this._el.removeEventListener(eventName, callback);
   }
+
+  trigger(eventName, data = null) {
+    let customEvent = new CustomEvent(eventName, {
+      bubbles: false,
+      detail: data
+    });
+
+    this._el.dispatchEvent(customEvent);
+  }
+
 }

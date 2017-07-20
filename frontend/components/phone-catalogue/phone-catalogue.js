@@ -30,11 +30,6 @@ export default class PhoneCatalogue extends Component {
       return;
     }
 
-    let customEvent = new CustomEvent('phoneSelected', {
-      bubbles: false,
-      detail: phoneElement.dataset.phoneId
-    });
-
-    this._el.dispatchEvent(customEvent);
+    this.trigger('phoneSelected', phoneElement.dataset.phoneId)
   }
 }
