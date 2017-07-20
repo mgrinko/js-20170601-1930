@@ -1,11 +1,14 @@
 'use strict';
 
 import compiledTemplate from './template.hbs';
+import Component from '../component';
 
-export default class PhoneViewer {
+export default class PhoneViewer extends Component {
 
   constructor(options) {
-    this._el = options.el;
+    super(options.el);
+
+    this._el.addEventListener('click', this._onBackButtonClick.bind(this))
   }
 
   render(phoneDetails) {
@@ -14,7 +17,15 @@ export default class PhoneViewer {
     });
   }
 
-  show() {
-    this._el.classList.remove('js-hidden');
+  _onBackButtonClick(event) {
+    if (!event.target.closest('[data-element="back-button"]')) {
+      return;
+    }
+
+    let customEvent = new CustomEvent('back', {
+      bubbles: false,
+    });
+
+    this._el.dispatchEvent(customEvent);
   }
 }
