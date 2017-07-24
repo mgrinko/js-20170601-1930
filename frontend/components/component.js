@@ -15,12 +15,14 @@ export default class Component {
     this._el.classList.remove(CLASS_HIDDEN);
   }
 
-  on(eventName, callback) {
-    this._el.addEventListener(eventName, callback);
-  }
+  on(eventName, callback, selector = '') {
+    this._el.addEventListener(eventName, (event) => {
+      if (selector && !event.target.closest(selector)) {
+        return;
+      }
 
-  off(eventName, callback) {
-    this._el.removeEventListener(eventName, callback);
+      callback(event);
+    });
   }
 
   trigger(eventName, data = null) {
