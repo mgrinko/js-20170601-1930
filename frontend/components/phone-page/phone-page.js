@@ -36,22 +36,28 @@ export default class PhonePage {
     let phoneId = event.detail;
 
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', `/data/phones/${phoneId}.json`, false);
+    xhr.open('GET', `/data/phones/${phoneId}.json`, true);
 
     xhr.send();
 
-    if (xhr.status !== 200) {
-      console.error( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
+    xhr.onerror = () => {
+      alert('server error');
+    };
 
-      return;
-    }
+    xhr.onload = () => {
+      if (xhr.status !== 200) {
+        console.error( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
 
-    let phoneDetails = JSON.parse(xhr.responseText);
+        return;
+      }
 
-    this._viewer.render(phoneDetails);
+      let phoneDetails = JSON.parse(xhr.responseText);
 
-    this._catalogue.hide();
-    this._viewer.show();
+      this._viewer.render(phoneDetails);
+
+      this._catalogue.hide();
+      this._viewer.show();
+    };
   }
 
   _onPhoneViewerBack() {
