@@ -1,0 +1,18 @@
+<img class="phone" src="{{ phone.images.[0] }}">
+
+<h1>{{{ phone.name }}}</h1>
+
+<p>{{{ phone.description }}}</p>
+
+<ul class="phone-thumbs">
+
+  {{#each phone.images as |image|}}
+    <li>
+      <img src="{{ image }}">
+    </li>
+  {{/each}}
+
+</ul>
+
+<button data-element="back-button">back to catalogue</button>
+<button data-element="add-button">add to basket</button>
