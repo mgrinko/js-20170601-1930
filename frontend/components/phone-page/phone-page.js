@@ -3,7 +3,8 @@
 import PhoneCatalogue from '../phone-catalogue/phone-catalogue';
 import PhoneViewer from '../phone-viewer/phone-viewer';
 import ShoppingCart from '../shopping-cart/shopping-cart';
-import HTTPService from '../../services/http.service';
+import PhoneService from '../../services/phone.service';
+
 
 export default class PhonePage {
   constructor(options) {
@@ -11,7 +12,6 @@ export default class PhonePage {
 
     this._catalogue = new PhoneCatalogue({
       el: this._el.querySelector('[data-component="phone-catalogue"]'),
-      phones: phonesFromServer
     });
 
     this._viewer = new PhoneViewer({
@@ -25,6 +25,8 @@ export default class PhonePage {
     this._catalogue.on('phoneSelected', this._onPhoneSelected.bind(this));
     this._viewer.on('back', this._onPhoneViewerBack.bind(this));
     this._viewer.on('add', this._onPhoneViewerAdd.bind(this));
+
+    PhoneService.getAll(this._showPhones.bind(this));
   }
 
   _onPhoneViewerAdd(event) {
@@ -34,21 +36,21 @@ export default class PhonePage {
   _onPhoneSelected(event) {
     let phoneId = event.detail;
 
-    this.getPhoneDetails(phoneId, this.showPhoneDetails.bind(this));
+    PhoneService.get(phoneId, this._showPhoneDetails.bind(this));
   }
 
-  showPhoneDetails(phoneDetails) {
+  _showPhones(phonesFromServer) {
+    this._catalogue.setPhones(phonesFromServer);
+  }
+
+  _showPhoneDetails(phoneDetails) {
     this._viewer.render(phoneDetails);
 
     this._catalogue.hide();
     this._viewer.show();
   }
 
-  getPhoneDetails(phoneId, callback) {
-    let url = `/data/phones/${phoneId}.json`;
 
-    HTTPService.sendRequest(url, callback);
-  }
 
   _onPhoneViewerBack() {
     this._viewer.hide();

@@ -3,7 +3,7 @@
 export default class HTTPService {
   static sendRequest(url, successCallback, method = 'GET') {
     let xhr = new XMLHttpRequest();
-    xhr.open(method, url, true);
+    xhr.open(method, '/data' + url, true);
 
     xhr.send();
 
