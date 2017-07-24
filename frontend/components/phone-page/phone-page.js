@@ -1,10 +1,9 @@
 'use strict';
 
-
-
 import PhoneCatalogue from '../phone-catalogue/phone-catalogue';
 import PhoneViewer from '../phone-viewer/phone-viewer';
 import ShoppingCart from '../shopping-cart/shopping-cart';
+import HTTPService from '../../services/http.service';
 
 export default class PhonePage {
   constructor(options) {
@@ -35,29 +34,20 @@ export default class PhonePage {
   _onPhoneSelected(event) {
     let phoneId = event.detail;
 
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', `/data/phones/${phoneId}.json`, true);
+    this.getPhoneDetails(phoneId, this.showPhoneDetails.bind(this));
+  }
 
-    xhr.send();
+  showPhoneDetails(phoneDetails) {
+    this._viewer.render(phoneDetails);
 
-    xhr.onerror = () => {
-      alert('server error');
-    };
+    this._catalogue.hide();
+    this._viewer.show();
+  }
 
-    xhr.onload = () => {
-      if (xhr.status !== 200) {
-        console.error( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
+  getPhoneDetails(phoneId, callback) {
+    let url = `/data/phones/${phoneId}.json`;
 
-        return;
-      }
-
-      let phoneDetails = JSON.parse(xhr.responseText);
-
-      this._viewer.render(phoneDetails);
-
-      this._catalogue.hide();
-      this._viewer.show();
-    };
+    HTTPService.sendRequest(url, callback);
   }
 
   _onPhoneViewerBack() {

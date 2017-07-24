@@ -5,6 +5,7 @@ var file = new static.Server('.', {
 });
 
 function accept(request, response) {
+
   if (request.url.slice(0, 6) === '/data/') {
     setTimeout(() => {
       file.serve(request, response);
