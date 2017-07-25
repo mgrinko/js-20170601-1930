@@ -29,6 +29,7 @@ export default class PhonePage {
     PhoneService.getAll(this._showPhones.bind(this));
   }
 
+
   _onPhoneViewerAdd(event) {
     this._shoppingCart.addProducts(event.detail);
   }
@@ -38,6 +39,12 @@ export default class PhonePage {
 
     PhoneService.get(phoneId, this._showPhoneDetails.bind(this));
   }
+
+  _onPhoneViewerBack() {
+    this._viewer.hide();
+    this._catalogue.show();
+  }
+
 
   _showPhones(phonesFromServer) {
     this._catalogue.setPhones(phonesFromServer);
@@ -50,12 +57,6 @@ export default class PhonePage {
     this._viewer.show();
   }
 
-
-
-  _onPhoneViewerBack() {
-    this._viewer.hide();
-    this._catalogue.show();
-  }
 }
 
 const phonesFromServer = [

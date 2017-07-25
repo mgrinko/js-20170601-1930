@@ -9,7 +9,7 @@ function accept(request, response) {
   if (request.url.slice(0, 6) === '/data/') {
     setTimeout(() => {
       file.serve(request, response);
-    }, 5000);
+    }, 100);
   } else {
     file.serve(request, response);
   }
