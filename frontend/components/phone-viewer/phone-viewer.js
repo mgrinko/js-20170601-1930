@@ -12,11 +12,16 @@ export default class PhoneViewer extends Component {
     this.on('click', this._onAddButtonClick.bind(this), '[data-element="add-button"]');
   }
 
-  render(phoneDetails) {
+  setPhone(phoneDetails) {
     this._phone = phoneDetails;
 
+    this._render();
+  }
+
+
+  _render() {
     this._el.innerHTML = compiledTemplate({
-      phone: phoneDetails
+      phone: this._phone,
     });
   }
 

@@ -51,7 +51,7 @@ export default class PhonePage {
   }
 
   _showPhoneDetails(phoneDetails) {
-    this._viewer.render(phoneDetails);
+    this._viewer.setPhone(phoneDetails);
 
     this._catalogue.hide();
     this._viewer.show();

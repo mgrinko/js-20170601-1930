@@ -26,10 +26,7 @@ export default class Component {
   }
 
   trigger(eventName, data = null) {
-    let customEvent = new CustomEvent(eventName, {
-      bubbles: false,
-      detail: data
-    });
+    let customEvent = new CustomEvent(eventName, { detail: data });
 
     this._el.dispatchEvent(customEvent);
   }
