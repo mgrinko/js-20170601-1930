@@ -9,6 +9,7 @@ import PhoneService from '../../services/phone.service';
 export default class PhonePage {
   constructor(options) {
     this._el = options.el;
+    this._selectedPhoneId = options.phoneId;
 
     this._catalogue = new PhoneCatalogue({
       el: this._el.querySelector('[data-component="phone-catalogue"]'),
@@ -26,7 +27,26 @@ export default class PhonePage {
     this._viewer.on('back', this._onPhoneViewerBack.bind(this));
     this._viewer.on('add', this._onPhoneViewerAdd.bind(this));
 
+
     PhoneService.getAll(this._showPhones.bind(this));
+
+    if (this._selectedPhoneId) {
+      PhoneService.get(this._selectedPhoneId, this._showPhoneDetails.bind(this));
+    }
+
+    window.onpopstate = () => {
+      let urlParts = window.location.hash.split('/');
+      let page = urlParts[1] || 'phones';
+      let pageData = urlParts[2] || '';
+
+      if (pageData) {
+        PhoneService.get(pageData, this._showPhoneDetails.bind(this));
+      } else {
+        this._viewer.hide();
+        this._catalogue.show();
+      }
+    }
+
   }
 
 
@@ -43,6 +63,8 @@ export default class PhonePage {
   _onPhoneViewerBack() {
     this._viewer.hide();
     this._catalogue.show();
+
+    window.history.back();
   }
 
 
