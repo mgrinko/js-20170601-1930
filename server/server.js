@@ -13,6 +13,7 @@ function accept(request, response) {
       file.serve(request, response);
     }, 100);
   } else {
+    request.url = '/public' + request.url;
     file.serve(request, response);
   }
 }

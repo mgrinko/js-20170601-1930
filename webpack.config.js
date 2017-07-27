@@ -37,12 +37,6 @@ module.exports = {
     ]
   },
 
-  plugins: [
-    new UglifyJSPlugin({
-      sourceMap: true
-    }),
-  ],
-
   devServer: {
     contentBase: path.resolve(__dirname, 'public'),
     publicPath: '/',

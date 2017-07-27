@@ -1,14 +1,12 @@
 'use strict';
 
-// const BASE_API_URL = 'https://mgrinko.github.io/js-20170601-1930/data';
-const BASE_API_URL = '//localhost:3000/data';
-
+import { API_URL } from '../../config';
 
 export default class HTTPService {
   static sendRequest(url, successCallback, method = 'GET') {
     let xhr = new XMLHttpRequest();
 
-    xhr.open(method, '/data' + url, true);
+    xhr.open(method, API_URL + url, true);
     xhr.send();
 
     xhr.onerror = () => {
