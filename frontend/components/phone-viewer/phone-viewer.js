@@ -8,8 +8,8 @@ export default class PhoneViewer extends Component {
   constructor(options) {
     super(options.el);
 
-    this.on('click', this._onBackButtonClick.bind(this));
-    this.on('click', this._onAddButtonClick.bind(this));
+    this.on('click', this._onBackButtonClick.bind(this), '[data-element="back-button"]');
+    this.on('click', this._onAddButtonClick.bind(this), '[data-element="add-button"]');
   }
 
   render(phoneDetails) {
@@ -21,18 +21,10 @@ export default class PhoneViewer extends Component {
   }
 
   _onBackButtonClick(event) {
-    if (!event.target.closest('[data-element="back-button"]')) {
-      return;
-    }
-
     this.trigger('back');
   }
 
   _onAddButtonClick(event) {
-    if (!event.target.closest('[data-element="add-button"]')) {
-      return;
-    }
-
     this.trigger('add', this._phone.id);
   }
 }

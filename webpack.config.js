@@ -44,9 +44,10 @@ module.exports = {
   ],
 
   devServer: {
-    hot: true, // Tell the dev-server we're using HMR
-    inline: true,
     contentBase: path.resolve(__dirname, 'public'),
-    publicPath: '/'
+    publicPath: '/',
+    proxy: {
+      '*': 'http://localhost:3000'
+    }
   }
 };

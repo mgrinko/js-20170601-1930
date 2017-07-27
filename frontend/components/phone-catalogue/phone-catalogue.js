@@ -10,11 +10,16 @@ export default class PhoneCatalogue extends Component {
   constructor(options) {
     super(options.el);
 
-    this._phones = options.phones;
+    this._phones = [];
 
     this._render();
 
-    this.on('click', this._onPhoneClick.bind(this));
+    this.on('click', this._onPhoneClick.bind(this), '[data-element="phone"]');
+  }
+
+  setPhones(phones) {
+    this._phones = phones;
+    this._render();
   }
 
   _render() {
@@ -26,10 +31,6 @@ export default class PhoneCatalogue extends Component {
   _onPhoneClick(event) {
     let phoneElement = event.target.closest('[data-element="phone"]');
 
-    if (!phoneElement) {
-      return;
-    }
-
-    this.trigger('phoneSelected', phoneElement.dataset.phoneId)
+    this.trigger('phoneSelected', phoneElement.dataset.phoneId);
   }
 }
