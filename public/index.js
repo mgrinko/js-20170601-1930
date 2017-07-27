@@ -2609,7 +2609,7 @@ exports.default = HTTPService;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var API_URL = exports.API_URL = 'https://mgrinko.github.io/js-20170601-1930/data';
+var API_URL = exports.API_URL = '//localhost:3000/data';
 
 /***/ })
 /******/ ]);

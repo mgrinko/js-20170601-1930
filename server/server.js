@@ -5,11 +5,11 @@ var file = new static.Server('.', {
 });
 
 function accept(request, response) {
-  // response.setHeader("Access-Control-Allow-Origin", '*');
-
 
   if (request.url.slice(0, 6) === '/data/') {
     setTimeout(() => {
+      response.setHeader("Access-Control-Allow-Origin", '*');
+
       file.serve(request, response);
     }, 100);
   } else {
