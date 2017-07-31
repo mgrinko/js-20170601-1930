@@ -37,17 +37,8 @@ module.exports = {
     ]
   },
 
-  plugins: [
-    new UglifyJSPlugin({
-      sourceMap: true
-    }),
-  ],
-
   devServer: {
     contentBase: path.resolve(__dirname, 'public'),
     publicPath: '/',
-    proxy: {
-      '*': 'http://localhost:3000'
-    }
   }
 };

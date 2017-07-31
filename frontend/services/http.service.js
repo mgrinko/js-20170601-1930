@@ -1,10 +1,12 @@
 'use strict';
 
+import { API_URL } from '../../config';
+
 export default class HTTPService {
   static sendRequest(url, successCallback, method = 'GET') {
     let xhr = new XMLHttpRequest();
 
-    xhr.open(method, '/data' + url, true);
+    xhr.open(method, API_URL + url, true);
     xhr.send();
 
     xhr.onerror = () => {
