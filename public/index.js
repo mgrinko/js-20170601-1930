@@ -466,6 +466,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _phoneCatalogue = __webpack_require__(7);
@@ -510,7 +512,7 @@ var PhonePage = function () {
     this._viewer.on('back', this._onPhoneViewerBack.bind(this));
     this._viewer.on('add', this._onPhoneViewerAdd.bind(this));
 
-    _phone2.default.getAll(this._showPhones.bind(this));
+    _phone2.default.getAll().then(this._showPhones.bind(this));
   }
 
   _createClass(PhonePage, [{
@@ -521,9 +523,28 @@ var PhonePage = function () {
   }, {
     key: '_onPhoneSelected',
     value: function _onPhoneSelected(event) {
+      var _this = this;
+
       var phoneId = event.detail;
 
-      _phone2.default.get(phoneId, this._showPhoneDetails.bind(this));
+      var phoneDetailsPromise = _phone2.default.get(phoneId);
+      var mouseoutPromise = this._catalogue.getMouseoutPromise();
+
+      // mouseoutPromise
+      //   .then((mouseoutDetails) => {
+      //     return phoneDetailsPromise;
+      //   })
+      //   .then((phoneDetails) => {
+      //     this._showPhoneDetails(phoneDetails);
+      //   });
+
+
+      Promise.all([phoneDetailsPromise, mouseoutPromise]).then(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 1),
+            phoneDetails = _ref2[0];
+
+        _this._showPhoneDetails(phoneDetails);
+      });
     }
   }, {
     key: '_onPhoneViewerBack',
@@ -739,6 +760,26 @@ var PhoneCatalogue = function (_Component) {
     value: function setPhones(phones) {
       this._phones = phones;
       this._render();
+    }
+  }, {
+    key: 'getMouseoutPromise',
+    value: function getMouseoutPromise() {
+      var _this2 = this;
+
+      return new Promise(function (resolve) {
+
+        _this2.on('mouseout', function (event) {
+          if (!event.target.matches('[data-element="phone"]')) {
+            return;
+          }
+
+          if (event.target.contains(event.relatedTarget)) {
+            return;
+          }
+
+          resolve();
+        });
+      });
     }
   }, {
     key: '_render',
@@ -2525,17 +2566,13 @@ var PhoneService = function () {
 
   _createClass(PhoneService, null, [{
     key: 'get',
-    value: function get(phoneId, callback) {
-      var url = '/phones/' + phoneId + '.json';
-
-      _http2.default.sendRequest(url, callback);
+    value: function get(phoneId) {
+      return _http2.default.send('/phones/' + phoneId + '.json');
     }
   }, {
     key: 'getAll',
-    value: function getAll(callback) {
-      var url = '/phones/phones.json';
-
-      _http2.default.sendRequest(url, callback);
+    value: function getAll() {
+      return _http2.default.send('/phones/phones.json');
     }
   }]);
 
@@ -2568,8 +2605,8 @@ var HTTPService = function () {
 
   _createClass(HTTPService, null, [{
     key: 'sendRequest',
-    value: function sendRequest(url, successCallback) {
-      var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
+    value: function sendRequest(url, successCallback, errorCallback) {
+      var method = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'GET';
 
       var xhr = new XMLHttpRequest();
 
@@ -2577,12 +2614,12 @@ var HTTPService = function () {
       xhr.send();
 
       xhr.onerror = function () {
-        alert(xhr.status);
+        errorCallback(xhr.status);
       };
 
       xhr.onload = function () {
         if (xhr.status !== 200) {
-          console.error(xhr.status + ': ' + xhr.statusText); // пример вывода: 404: Not Found
+          errorCallback(xhr.status + ': ' + xhr.statusText); // пример вывода: 404: Not Found
 
           return;
         }
@@ -2591,6 +2628,35 @@ var HTTPService = function () {
 
         successCallback(data);
       };
+    }
+  }, {
+    key: 'send',
+    value: function send(url) {
+      var method = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'GET';
+
+      return new Promise(function (resolve, reject) {
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open(method, _config.API_URL + url, true);
+        xhr.send();
+
+        xhr.onerror = function () {
+          reject(xhr.status + ': ' + xhr.statusText);
+        };
+
+        xhr.onload = function () {
+          if (xhr.status !== 200) {
+            reject(xhr.status + ': ' + xhr.statusText);
+
+            return;
+          }
+
+          var data = JSON.parse(xhr.responseText);
+
+          resolve(data);
+        };
+      });
     }
   }]);
 

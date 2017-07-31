@@ -26,7 +26,8 @@ export default class PhonePage {
     this._viewer.on('back', this._onPhoneViewerBack.bind(this));
     this._viewer.on('add', this._onPhoneViewerAdd.bind(this));
 
-    PhoneService.getAll(this._showPhones.bind(this));
+    PhoneService.getAll()
+      .then(this._showPhones.bind(this));
   }
 
 
@@ -37,7 +38,23 @@ export default class PhonePage {
   _onPhoneSelected(event) {
     let phoneId = event.detail;
 
-    PhoneService.get(phoneId, this._showPhoneDetails.bind(this));
+    let phoneDetailsPromise = PhoneService.get(phoneId);
+    let mouseoutPromise = this._catalogue.getMouseoutPromise();
+
+    // mouseoutPromise
+    //   .then((mouseoutDetails) => {
+    //     return phoneDetailsPromise;
+    //   })
+    //   .then((phoneDetails) => {
+    //     this._showPhoneDetails(phoneDetails);
+    //   });
+
+
+    Promise.all([phoneDetailsPromise, mouseoutPromise])
+      .then(([phoneDetails]) => {
+        this._showPhoneDetails(phoneDetails);
+      });
+
   }
 
   _onPhoneViewerBack() {
