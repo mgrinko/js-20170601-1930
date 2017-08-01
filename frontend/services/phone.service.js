@@ -2,16 +2,12 @@ import HTTPService from './http.service';
 
 
 export default class PhoneService {
-  static get(phoneId, callback) {
-    let url = `/phones/${phoneId}.json`;
-
-    HTTPService.sendRequest(url, callback);
+  static get(phoneId) {
+    return HTTPService.send(`/phones/${phoneId}.json`);
   }
 
-  static getAll(callback) {
-    let url = `/phones/phones.json`;
-
-    HTTPService.sendRequest(url, callback);
+  static getAll() {
+    return HTTPService.send(`/phones/phones.json`);
   }
 }
 

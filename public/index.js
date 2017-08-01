@@ -303,13 +303,24 @@ var Component = function () {
     value: function on(eventName, callback) {
       var selector = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
 
+      if (!selector) {
+        this._el.addEventListener(eventName, callback);
+
+        return;
+      }
+
       this._el.addEventListener(eventName, function (event) {
-        if (selector && !event.target.closest(selector)) {
+        if (!event.target.closest(selector)) {
           return;
         }
 
         callback(event);
       });
+    }
+  }, {
+    key: 'off',
+    value: function off(eventName, callback) {
+      this._el.removeEventListener(eventName, callback);
     }
   }, {
     key: 'trigger',
@@ -466,6 +477,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _phoneCatalogue = __webpack_require__(7);
@@ -510,7 +523,7 @@ var PhonePage = function () {
     this._viewer.on('back', this._onPhoneViewerBack.bind(this));
     this._viewer.on('add', this._onPhoneViewerAdd.bind(this));
 
-    _phone2.default.getAll(this._showPhones.bind(this));
+    _phone2.default.getAll().then(this._showPhones.bind(this));
   }
 
   _createClass(PhonePage, [{
@@ -521,9 +534,26 @@ var PhonePage = function () {
   }, {
     key: '_onPhoneSelected',
     value: function _onPhoneSelected(event) {
+      var _this = this;
+
       var phoneId = event.detail;
 
-      _phone2.default.get(phoneId, this._showPhoneDetails.bind(this));
+      var phoneDetailsPromise = _phone2.default.get(phoneId);
+      var mouseoutPromise = this._catalogue.getMouseoutPromise();
+
+      // mouseoutPromise
+      //   .then((mouseoutDetails) => phoneDetailsPromise)
+      //   .then((phoneDetails) => {
+      //     this._showPhoneDetails(phoneDetails);
+      //   });
+
+
+      Promise.all([phoneDetailsPromise, mouseoutPromise]).then(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 1),
+            phoneDetails = _ref2[0];
+
+        _this._showPhoneDetails(phoneDetails);
+      });
     }
   }, {
     key: '_onPhoneViewerBack',
@@ -550,142 +580,6 @@ var PhonePage = function () {
 }();
 
 exports.default = PhonePage;
-
-
-var phonesFromServer = [{
-  "age": 0,
-  "id": "motorola-xoom-with-wi-fi",
-  "imageUrl": "img/phones/motorola-xoom-with-wi-fi.0.jpg",
-  "name": 'Motorola XOOM\u2122 with Wi-Fi',
-  "snippet": "The Next, Next Generation\r\n\r\nExperience the future with Motorola XOOM with Wi-Fi, the world's first tablet powered by Android 3.0 (Honeycomb)."
-}, {
-  "age": 1,
-  "id": "motorola-xoom",
-  "imageUrl": "img/phones/motorola-xoom.0.jpg",
-  "name": 'MOTOROLA XOOM\u2122',
-  "snippet": "The Next, Next Generation\n\nExperience the future with MOTOROLA XOOM, the world's first tablet powered by Android 3.0 (Honeycomb)."
-}, {
-  "age": 2,
-  "carrier": "AT&T",
-  "id": "motorola-atrix-4g",
-  "imageUrl": "img/phones/motorola-atrix-4g.0.jpg",
-  "name": 'MOTOROLA ATRIX\u2122 4G',
-  "snippet": "MOTOROLA ATRIX 4G the world's most powerful smartphone."
-}, {
-  "age": 3,
-  "id": "dell-streak-7",
-  "imageUrl": "img/phones/dell-streak-7.0.jpg",
-  "name": "Dell Streak 7",
-  "snippet": 'Introducing Dell\u2122 Streak 7. Share photos, videos and movies together. It\u2019s small enough to carry around, big enough to gather around.'
-}, {
-  "age": 4,
-  "carrier": "Cellular South",
-  "id": "samsung-gem",
-  "imageUrl": "img/phones/samsung-gem.0.jpg",
-  "name": 'Samsung Gem\u2122',
-  "snippet": 'The Samsung Gem\u2122 brings you everything that you would expect and more from a touch display smart phone \u2013 more apps, more features and a more affordable price.'
-}, {
-  "age": 5,
-  "carrier": "Dell",
-  "id": "dell-venue",
-  "imageUrl": "img/phones/dell-venue.0.jpg",
-  "name": "Dell Venue",
-  "snippet": "The Dell Venue; Your Personal Express Lane to Everything"
-}, {
-  "age": 6,
-  "carrier": "Best Buy",
-  "id": "nexus-s",
-  "imageUrl": "img/phones/nexus-s.0.jpg",
-  "name": "Nexus S",
-  "snippet": "Fast just got faster with Nexus S. A pure Google experience, Nexus S is the first phone to run Gingerbread (Android 2.3), the fastest version of Android yet."
-}, {
-  "age": 7,
-  "carrier": "Cellular South",
-  "id": "lg-axis",
-  "imageUrl": "img/phones/lg-axis.0.jpg",
-  "name": "LG Axis",
-  "snippet": "Android Powered, Google Maps Navigation, 5 Customizable Home Screens"
-}, {
-  "age": 8,
-  "id": "samsung-galaxy-tab",
-  "imageUrl": "img/phones/samsung-galaxy-tab.0.jpg",
-  "name": 'Samsung Galaxy Tab\u2122',
-  "snippet": 'Feel Free to Tab\u2122. The Samsung Galaxy Tab\u2122 brings you an ultra-mobile entertainment experience through its 7\u201D display, high-power processor and Adobe\xAE Flash\xAE Player compatibility.'
-}, {
-  "age": 9,
-  "carrier": "Cellular South",
-  "id": "samsung-showcase-a-galaxy-s-phone",
-  "imageUrl": "img/phones/samsung-showcase-a-galaxy-s-phone.0.jpg",
-  "name": 'Samsung Showcase\u2122 a Galaxy S\u2122 phone',
-  "snippet": 'The Samsung Showcase\u2122 delivers a cinema quality experience like you\u2019ve never seen before. Its innovative 4\u201D touch display technology provides rich picture brilliance, even outdoors'
-}, {
-  "age": 10,
-  "carrier": "Verizon",
-  "id": "droid-2-global-by-motorola",
-  "imageUrl": "img/phones/droid-2-global-by-motorola.0.jpg",
-  "name": 'DROID\u2122 2 Global by Motorola',
-  "snippet": "The first smartphone with a 1.2 GHz processor and global capabilities."
-}, {
-  "age": 11,
-  "carrier": "Verizon",
-  "id": "droid-pro-by-motorola",
-  "imageUrl": "img/phones/droid-pro-by-motorola.0.jpg",
-  "name": 'DROID\u2122 Pro by Motorola',
-  "snippet": "The next generation of DOES."
-}, {
-  "age": 12,
-  "carrier": "AT&T",
-  "id": "motorola-bravo-with-motoblur",
-  "imageUrl": "img/phones/motorola-bravo-with-motoblur.0.jpg",
-  "name": 'MOTOROLA BRAVO\u2122 with MOTOBLUR\u2122',
-  "snippet": "An experience to cheer about."
-}, {
-  "age": 13,
-  "carrier": "T-Mobile",
-  "id": "motorola-defy-with-motoblur",
-  "imageUrl": "img/phones/motorola-defy-with-motoblur.0.jpg",
-  "name": 'Motorola DEFY\u2122 with MOTOBLUR\u2122',
-  "snippet": "Are you ready for everything life throws your way?"
-}, {
-  "age": 14,
-  "carrier": "T-Mobile",
-  "id": "t-mobile-mytouch-4g",
-  "imageUrl": "img/phones/t-mobile-mytouch-4g.0.jpg",
-  "name": "T-Mobile myTouch 4G",
-  "snippet": "The T-Mobile myTouch 4G is a premium smartphone designed to deliver blazing fast 4G speeds so that you can video chat from practically anywhere, with or without Wi-Fi."
-}, {
-  "age": 15,
-  "carrier": "US Cellular",
-  "id": "samsung-mesmerize-a-galaxy-s-phone",
-  "imageUrl": "img/phones/samsung-mesmerize-a-galaxy-s-phone.0.jpg",
-  "name": 'Samsung Mesmerize\u2122 a Galaxy S\u2122 phone',
-  "snippet": 'The Samsung Mesmerize\u2122 delivers a cinema quality experience like you\u2019ve never seen before. Its innovative 4\u201D touch display technology provides rich picture brilliance,even outdoors'
-}, {
-  "age": 16,
-  "carrier": "Sprint",
-  "id": "sanyo-zio",
-  "imageUrl": "img/phones/sanyo-zio.0.jpg",
-  "name": "SANYO ZIO",
-  "snippet": "The Sanyo Zio by Kyocera is an Android smartphone with a combination of ultra-sleek styling, strong performance and unprecedented value."
-}, {
-  "age": 17,
-  "id": "samsung-transform",
-  "imageUrl": "img/phones/samsung-transform.0.jpg",
-  "name": 'Samsung Transform\u2122',
-  "snippet": 'The Samsung Transform\u2122 brings you a fun way to customize your Android powered touch screen phone to just the way you like it through your favorite themed \u201CSprint ID Service Pack\u201D.'
-}, {
-  "age": 18,
-  "id": "t-mobile-g2",
-  "imageUrl": "img/phones/t-mobile-g2.0.jpg",
-  "name": "T-Mobile G2",
-  "snippet": "The T-Mobile G2 with Google is the first smartphone built for 4G speeds on T-Mobile's new network. Get the information you need, faster than you ever thought possible."
-}, {
-  "age": 19,
-  "id": "motorola-charm-with-motoblur",
-  "imageUrl": "img/phones/motorola-charm-with-motoblur.0.jpg",
-  "name": 'Motorola CHARM\u2122 with MOTOBLUR\u2122',
-  "snippet": "Motorola CHARM fits easily in your pocket or palm.  Includes MOTOBLUR service."
-}];
 
 /***/ }),
 /* 7 */
@@ -739,6 +633,27 @@ var PhoneCatalogue = function (_Component) {
     value: function setPhones(phones) {
       this._phones = phones;
       this._render();
+    }
+  }, {
+    key: 'getMouseoutPromise',
+    value: function getMouseoutPromise() {
+      var _this2 = this;
+
+      return new Promise(function (resolve) {
+        var handler = function handler(event) {
+          var phoneElement = event.target.closest('[data-element="phone"]');
+
+          if (!phoneElement || phoneElement.contains(event.relatedTarget)) {
+            return;
+          }
+
+          _this2.off('mouseout', handler);
+
+          resolve();
+        };
+
+        _this2.on('mouseout', handler);
+      });
     }
   }, {
     key: '_render',
@@ -2525,17 +2440,13 @@ var PhoneService = function () {
 
   _createClass(PhoneService, null, [{
     key: 'get',
-    value: function get(phoneId, callback) {
-      var url = '/phones/' + phoneId + '.json';
-
-      _http2.default.sendRequest(url, callback);
+    value: function get(phoneId) {
+      return _http2.default.send('/phones/' + phoneId + '.json');
     }
   }, {
     key: 'getAll',
-    value: function getAll(callback) {
-      var url = '/phones/phones.json';
-
-      _http2.default.sendRequest(url, callback);
+    value: function getAll() {
+      return _http2.default.send('/phones/phones.json');
     }
   }]);
 
@@ -2568,8 +2479,8 @@ var HTTPService = function () {
 
   _createClass(HTTPService, null, [{
     key: 'sendRequest',
-    value: function sendRequest(url, successCallback) {
-      var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
+    value: function sendRequest(url, successCallback, errorCallback) {
+      var method = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'GET';
 
       var xhr = new XMLHttpRequest();
 
@@ -2577,12 +2488,12 @@ var HTTPService = function () {
       xhr.send();
 
       xhr.onerror = function () {
-        alert(xhr.status);
+        errorCallback(xhr.status);
       };
 
       xhr.onload = function () {
         if (xhr.status !== 200) {
-          console.error(xhr.status + ': ' + xhr.statusText); // пример вывода: 404: Not Found
+          errorCallback(xhr.status + ': ' + xhr.statusText); // пример вывода: 404: Not Found
 
           return;
         }
@@ -2591,6 +2502,35 @@ var HTTPService = function () {
 
         successCallback(data);
       };
+    }
+  }, {
+    key: 'send',
+    value: function send(url) {
+      var method = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'GET';
+
+      return new Promise(function (resolve, reject) {
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open(method, _config.API_URL + url, true);
+        xhr.send();
+
+        xhr.onerror = function () {
+          reject(xhr.status + ': ' + xhr.statusText);
+        };
+
+        xhr.onload = function () {
+          if (xhr.status !== 200) {
+            reject(xhr.status + ': ' + xhr.statusText);
+
+            return;
+          }
+
+          var data = JSON.parse(xhr.responseText);
+
+          resolve(data);
+        };
+      });
     }
   }]);
 

@@ -22,6 +22,24 @@ export default class PhoneCatalogue extends Component {
     this._render();
   }
 
+  getMouseoutPromise() {
+    return new Promise((resolve) => {
+      let handler = (event) => {
+        let phoneElement = event.target.closest('[data-element="phone"]');
+
+        if (!phoneElement || phoneElement.contains(event.relatedTarget)) {
+          return;
+        }
+
+        this.off('mouseout', handler);
+
+        resolve();
+      };
+
+      this.on('mouseout', handler);
+    });
+  }
+
   _render() {
     this._el.innerHTML = compiledTemplate({
       phones: this._phones

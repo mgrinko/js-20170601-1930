@@ -11,7 +11,7 @@ function accept(request, response) {
       response.setHeader("Access-Control-Allow-Origin", '*');
 
       file.serve(request, response);
-    }, 100);
+    }, 5000);
   } else {
     request.url = '/public' + request.url;
     file.serve(request, response);

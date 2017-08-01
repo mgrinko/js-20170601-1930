@@ -16,13 +16,23 @@ export default class Component {
   }
 
   on(eventName, callback, selector = '') {
+    if (!selector) {
+      this._el.addEventListener(eventName, callback);
+
+      return;
+    }
+
     this._el.addEventListener(eventName, (event) => {
-      if (selector && !event.target.closest(selector)) {
+      if (!event.target.closest(selector)) {
         return;
       }
 
       callback(event);
     });
+  }
+
+  off(eventName, callback) {
+    this._el.removeEventListener(eventName, callback);
   }
 
   trigger(eventName, data = null) {
