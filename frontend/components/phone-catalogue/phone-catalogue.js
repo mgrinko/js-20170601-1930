@@ -23,25 +23,21 @@ export default class PhoneCatalogue extends Component {
   }
 
   getMouseoutPromise() {
-
     return new Promise((resolve) => {
+      let handler = (event) => {
+        let phoneElement = event.target.closest('[data-element="phone"]');
 
-      this.on('mouseout', (event) => {
-        if (!event.target.matches('[data-element="phone"]')) {
+        if (!phoneElement || phoneElement.contains(event.relatedTarget)) {
           return;
         }
 
-        if (event.target.contains(event.relatedTarget)) {
-          return;
-        }
+        this.off('mouseout', handler);
 
         resolve();
+      };
 
-      });
-
+      this.on('mouseout', handler);
     });
-
-
   }
 
   _render() {
